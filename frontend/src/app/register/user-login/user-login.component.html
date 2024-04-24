@@ -1,0 +1,115 @@
+<div class="tab-content login-tab">
+    <div
+      class="tab-pane fade show active"
+      id="pills-login"
+      role="tabpanel"
+      aria-labelledby="tab-login"
+    >
+      <form
+        class="form"
+        #loginForm="ngForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        autocomplete="off"
+      >
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="loginName">Email:</label>
+          <input
+            type="email"
+            id="loginName"
+            name="email"
+            appEmailValidator
+            required
+            [(ngModel)]="loginUser.email"
+            #email="ngModel"
+            class="form-control"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+                  (email.touched || loginForm.submitted) &&
+                  email.errors?.['required']
+                "
+          >
+            Email is required
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="email.touched && email.errors?.['invalidEmail']"
+          >
+            Enter a valid email address
+          </span>
+        </div>
+  
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input
+            type="password"
+            id="loginPassword"
+            name="password"
+            class="form-control"
+            [(ngModel)]="loginUser.password"
+            #password="ngModel"
+            required
+            appPasswordValidator
+            [minChar]="10"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+                  (password.touched || loginForm.submitted) &&
+                  password.errors?.['required']
+                "
+          >
+            Password is required
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="password.touched && password.errors?.['invalidPassword']"
+          >
+            Please enter a password with atleast 10 characters including 1 special
+            character 1 uppercase 1 lowercase and 1 number
+          </span>
+        </div>
+  
+        <!-- 2 column grid layout -->
+        <div class="row mb-4">
+          <div class="col-md-6 d-flex justify-content-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-3 mb-md-0">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="loginCheck"
+                checked
+              />
+              <label class="form-check-label" for="loginCheck">
+                Remember me
+              </label>
+            </div>
+          </div>
+  
+          <div class="col-md-6 d-flex justify-content-center">
+            <!-- Simple link -->
+            <a href="#!">Forgot password?</a>
+          </div>
+        </div>
+  
+        <!-- Submit button -->
+        <div class="signin">
+          <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary btn-block mb-4">
+            Sign in
+          </button>
+        </div>
+  
+        <!-- Register buttons -->
+        <div class="text-center">
+          <p>Not a member? <a routerLink="register">Register</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,213 @@
+<div class = "tab-content register-tab">
+    <div
+      class="tab-pane fade show active"
+      id="pills-register"
+      role="tabpanel"
+      aria-labelledby="tab-register"
+    >
+      <form
+        class="form"
+        #registerForm="ngForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        [appPasswordMatch]="['password', 'confirmPassword']"
+        autocomplete="off"
+      >
+  
+        <!-- Name input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="registerName">Name</label>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="registerUser.name"
+            #name="ngModel"
+            required
+            id="registerName"
+            class="form-control"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+                  (name.touched || registerForm.submitted) &&
+                  name.errors?.['required']
+                "
+          >
+            Name is required
+          </span>
+        </div>
+  
+        <!-- Username input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="registerUsername">Username</label>
+          <input
+            type="text"
+            name="userName"
+            [(ngModel)]="registerUser.userName"
+            #userName="ngModel"
+            required
+            id="registerUsername"
+            class="form-control"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+                  (userName.touched || registerForm.submitted) &&
+                  userName.errors?.['required']
+                "
+          >
+            Username is required
+          </span>
+        </div>
+  
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="registerEmail">Email</label>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="registerUser.email"
+            #email="ngModel"
+            required
+            appEmailValidator
+            id="registerEmail"
+            class="form-control"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+                  (email.touched || registerForm.submitted) &&
+                  email.errors?.['required']
+                "
+          >
+            Email is required
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="email.touched && email.errors?.['invalidEmail']"
+          >
+            Enter a valid email address
+          </span>
+        </div>
+  
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="registerPassword">Password</label>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="registerUser.password"
+            #password="ngModel"
+            appPasswordValidator
+            required
+            [minChar]="10"
+            id="registerPassword"
+            class="form-control"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+                  (password.touched || registerForm.submitted) &&
+                  password.errors?.['required']
+                "
+          >
+            Password is required
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="password.touched && password.errors?.['invalidPassword']"
+          >
+            Please enter a password with atleast 10 characters including 1 special
+            character 1 uppercase 1 lowercase and 1 number
+          </span>
+        </div>
+  
+        <!-- Repeat Password input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="registerRepeatPassword"
+            >Repeat password</label
+          >
+          <input
+            type="password"
+            name="confirmPassword"
+            [(ngModel)]="registerUser.confirmPassword"
+            #confirmPassword="ngModel"
+            required
+            id="registerRepeatPassword"
+            class="form-control"
+          />
+          <span
+            class="text-danger"
+            *ngIf="
+                  (confirmPassword.touched || registerForm.submitted) &&
+                  confirmPassword.errors?.['required']
+                "
+          >
+            Confirm Password is required
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="
+                  confirmPassword.touched &&
+                  confirmPassword.errors?.['passwordMismatch']
+                "
+          >
+            Passwords doesnot match
+          </span>
+        </div>
+  
+        <!-- is Admin input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="checkAdmin">Register as Admin?</label>
+  
+          <input
+            type="radio"
+            id="admin"
+            name="isAdmin"
+            value="yes"
+            [(ngModel)]="registerUser.isAdmin"
+            class="form-check-input"
+          />
+          <label class="form-label" for="admin">Yes </label>
+  
+          <input
+            type="radio"
+            id="User"
+            value="no"
+            name="isAdmin"
+            [(ngModel)]="registerUser.isAdmin"
+            [checked]="!registerUser.isAdmin"
+            class="form-check-input"
+          />
+          <label class="form-label" for="user">No </label>
+        </div>
+  
+        <!-- Checkbox -->
+        <div class="form-check d-flex justify-content-center mb-4">
+          <input
+            class="form-check-input me-2"
+            type="checkbox"
+            name="termsCheck"
+  
+            [ngModel]=true
+            id="registerCheck"
+            required
+            aria-describedby="registerCheckHelpText"
+          />
+          <label class="form-check-label" for="registerCheck">
+            I have read and agree to the terms
+          </label>
+        </div>
+  
+        <!-- Submit button -->
+        <button
+          [disabled]="registerForm.invalid"
+          type="submit"
+          class="btn btn-primary btn-block mb-3"
+        >
+          Sign in
+        </button>
+      </form>
+    </div>
+  </div>
+  

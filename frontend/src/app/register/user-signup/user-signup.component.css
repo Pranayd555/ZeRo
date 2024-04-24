@@ -1,0 +1,12 @@
+.register-tab {
+    padding-top: 70px;
+    height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-tab .tab-pane{
+  max-width: 30%;
+  min-width: 30%;
+}

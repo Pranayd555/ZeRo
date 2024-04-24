@@ -1,0 +1,22 @@
+
+<header class="header">
+    <a class="navbar-brand" routerLink="welcome">{{loginUser.name}}</a>
+<nav class="navbar" data-bs-theme="dark">
+    <div class="container-fluid">
+
+
+      <button *ngIf="!loginUser?.token" type="button" class="login btn btn-primary" (click)="navigateTo('user-register/login')">
+        <img src= "../../../assets/icons/person-lines-fill.svg" alt="user"/>
+        Log In
+      </button>
+      <button *ngIf="loginUser?.token" type="button" class="login btn btn-primary" (click)="logOutUser()">
+        <img src= "../../../assets/icons/person-lines-fill.svg" alt="user"/>
+        Log Out
+      </button>
+      <button type="button" class="btn btn-success" (click)="navigateTo('user-register/signup')">
+        <img src= "../../../assets/icons/person-lines-fill.svg" alt="user"/>
+        Sign Up
+      </button>
+    </div>
+  </nav>
+</header>
