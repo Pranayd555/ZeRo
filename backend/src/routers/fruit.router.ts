@@ -1,10 +1,8 @@
 import {Router} from 'express';
-import { sample_fruits, sample_users } from '../data';
+import { sample_fruits } from '../data';
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
-import { User, UserModel } from '../models/user.model';
-import { HTTP_BAD_REQUEST } from '../constants/https_status';
-import bcrypt from 'bcryptjs';
+import { HTTP_BAD_REQUEST, HTTP_UNAUTHORISED_REQUEST } from '../constants/https_status';
 import { FruitModel } from '../models/fruits.model';
 
 
@@ -22,7 +20,7 @@ router.get("/seed", asyncHandler(
     }
 ));
 
-router.get("/", asyncHandler (
+router.get("/",verifyToken, asyncHandler (
     async (req, res)=> {
         const fruitsCount = await FruitModel.countDocuments();
         if(fruitsCount > 0) {
@@ -33,7 +31,7 @@ router.get("/", asyncHandler (
         res.status(500).send("No fruit is availale in the collection")
 }));
 
-router.put("/update", asyncHandler(
+router.put("/update",verifyToken, asyncHandler(
     async (req, res) => {
         const {name} = req.body;
         let fruit: any;
@@ -49,42 +47,24 @@ router.put("/update", asyncHandler(
     }
 ));
 
-// router.post("/register", asyncHandler(
-//     async (req, res) => {
-//         let { name, userName, email, password, isAdmin } = req.body;
-//         const user = await FruitModel.findOne({email});
+function verifyToken(req:any, res:any, next: any) {
+    console.log(req.headers.authorisation);
+    if(!req.headers.authorisation) {
+        return res.status(HTTP_UNAUTHORISED_REQUEST).send('Unauthorised request: No authorisation')
+    }
+    let token = req.headers.authorisation;
+    console.log('token in api', token);
+    if(token === null) {
+        return res.status(HTTP_UNAUTHORISED_REQUEST).send('Unauthorised request: token is null')
+    }
 
-//         if(user) {
-//             res.status(HTTP_BAD_REQUEST).send('User already exists, please login');
-//         } 
-
-//         const encryptedPassword = await bcrypt.hash(password, 10);
-
-//         const newUser:User = {
-//             id:'',
-//             name,
-//             userName,
-//             email: email.toLowerCase(),
-//             password: encryptedPassword,
-//             isAdmin,
-//             token: ''
-//         }
-
-//         const dbUser = await FruitModel.create(newUser);
-
-//         res.send(generateJsonWebToken(dbUser))
-
-//         }
-// ))
-
-// const generateJsonWebToken = (user: User) => {
-//     const token = jwt.sign({
-//         email:user.email, isAdmin: user.isAdmin
-//     }, "12345", {expiresIn: "30d"});
-
-//     user['token'] = token;
-//     console.log('token generated', user);
-//     return user;
-// }
+    let payload = jwt.verify(token, '12345')
+    console.log('payload created', payload);
+    if(!payload) {
+        return res.status(HTTP_UNAUTHORISED_REQUEST).send("Unauthorised request: Secret key doesn't match")
+    }
+    req.userId = payload.sub
+    next();
+}
 
 export default router;

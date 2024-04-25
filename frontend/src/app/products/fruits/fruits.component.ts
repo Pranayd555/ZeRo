@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { Fruit } from 'src/app/shared/models/fruit';
 import { SharedService } from 'src/app/shared/services/shared.service';
 
 @Component({
@@ -8,33 +9,36 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 })
 export class FruitsComponent implements OnInit{
 
-  fruits: any[] = [];
-  fruitImage: any;
+  fruits: Fruit[] = [];
+  updatedFruit: Fruit = new Fruit();
   isEdit: any;
   sharedService = inject(SharedService);
 
   ngOnInit() {
     this.sharedService.getFruits().subscribe(
-      (      data: any) => {
-this.fruits = data;
-console.log('fruits', this.fruits)
+     {
+      next: (data: Fruit[]) => {
+          this.fruits = data;
+          console.log('fruits', this.fruits)
+      },
+      error: (error) => {
+        console.log('error occurred while fetching the data', error)
       }
+    }
     );
   }
 
-  onFileSelect(event: any) {
-    const file: File = event.target.files[0];
-    if(file) {
-      console.log(file)
-      this.fruitImage = file;
-    }
-  }
-
-  onSubmit(fruit: any) {
+  onSubmit(fruit: Fruit) {
     
     this.sharedService.updateFruit(fruit).subscribe({
-      next: (data: any) => {
+      next: (data: Fruit) => {
         console.log('upload successfully', data);
+        this.fruits.map( fruit => {
+          if(fruit.name == data.name) {
+            fruit = data;
+            this.isEdit = Object.assign({...this.isEdit}, {})
+          }
+        })
       },
       error: (error: any) => {
         console.log('error in upload', error);
@@ -44,6 +48,15 @@ console.log('fruits', this.fruits)
 
 
   enableEdit(name: string) {
+    if(this.isEdit?.name && name !== this.isEdit?.name ) {
+      let oldFruit = this.fruits.find( fruit => fruit.name == this.isEdit.name)!;
+      JSON.stringify(oldFruit) !== JSON.stringify(this.updatedFruit) ? this.onSubmit(oldFruit) : '';
+    }
+    this.updatedFruit = this.fruits.find( fruit => fruit.name == this.isEdit.name)!;
     this.isEdit = Object.assign({...this.isEdit}, {'name': name})
+  }
+
+  isUpdated(index: any, value: Fruit) {
+    return value;
   }
 }

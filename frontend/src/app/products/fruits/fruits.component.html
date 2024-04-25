@@ -1,26 +1,63 @@
 <ng-container *ngIf="fruits && fruits.length > 0">
-<div class="card" *ngFor="let fruit of fruits">
-  <div>
-    <h1>{{fruit.name}}</h1>
-    <p class="price">${{fruit.price}}/{{fruit.quantity}}</p>
-    <p><b>Given discount {{fruit.discount}}..</b></p>
-    <p><b>Some text about the {{fruit.name}}..</b></p>
-    <p>{{fruit.about}}</p>
-    <p><button (click)="enableEdit(fruit.name)">Edit</button></p> 
-  </div>
+  <div class="card" *ngFor="let fruit of fruits; trackBy: isUpdated">
+    <h1>{{ fruit.name }}</h1>
+    <div *ngIf="!isEdit || isEdit['name'] !== fruit.name">
+      <p class="price">${{ fruit.price }}/{{ fruit.quantity }}</p>
+      <p>
+        <b>Given discount {{ fruit.discount }}..</b>
+      </p>
+      <p>
+        <b>Some text about the {{ fruit.name }}..</b>
+      </p>
+      <p>{{ fruit.about }}</p>
+      <p><button (click)="enableEdit(fruit.name)">Edit</button></p>
+    </div>
     <form
-    *ngIf="isEdit && isEdit['name'] == fruit.name"
-    class="form"
-    #fruitsForm="ngForm"
-    (ngSubmit)="fruitsForm.valid ? onSubmit(fruit) : ''"
-    novalidate
-    autocomplete="off">
-    <p>price:<input type="text" [ngClass]="price.touched && price.invalid ? 'error' : ''"  name="price" [(ngModel)] = "fruit.price" #price="ngModel" id="price"></p>
-    <p>quatity:<input type="text" [ngClass]="quantity.touched && quantity.invalid ? 'error' : ''"  name="quantity" [(ngModel)] = "fruit.quantity" #quantity="ngModel" id="quantity"></p> 
-    <p>Discount:<input type="text" name="discount" [(ngModel)] = "fruit.discount" #discount="ngModel" id="discount"></p> 
-    <p>about:<textarea id="about" name="about" [(ngModel)] = "fruit.about" #about="ngModel"></textarea></p>
-    <p><button type="submit">Update</button></p>
-  </form>
-    
+      *ngIf="isEdit && isEdit['name'] == updatedFruit.name"
+      class="form"
+      #fruitsForm="ngForm"
+      (ngSubmit)="fruitsForm.valid ? onSubmit(updatedFruit) : ''"
+      novalidate
+      autocomplete="off"
+    >
+      <p>
+        price:<input
+          type="text"
+          [ngClass]="price.touched && price.invalid ? 'error' : ''"
+          name="price"
+          [(ngModel)]="updatedFruit.price"
+          #price="ngModel"
+          id="price"
+        />
+      </p>
+      <p>
+        quatity:<input
+          type="text"
+          [ngClass]="quantity.touched && quantity.invalid ? 'error' : ''"
+          name="quantity"
+          [(ngModel)]="updatedFruit.quantity"
+          #quantity="ngModel"
+          id="quantity"
+        />
+      </p>
+      <p>
+        Discount:<input
+          type="text"
+          name="discount"
+          [(ngModel)]="updatedFruit.discount"
+          #discount="ngModel"
+          id="discount"
+        />
+      </p>
+      <p>
+        about:<textarea
+          id="about"
+          name="about"
+          [(ngModel)]="updatedFruit.about"
+          #about="ngModel"
+        ></textarea>
+      </p>
+      <p><button type="submit">Update</button></p>
+    </form>
   </div>
 </ng-container>

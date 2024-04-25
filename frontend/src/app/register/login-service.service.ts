@@ -16,7 +16,7 @@ const TOKEN = 'token';
 })
 export class LoginServiceService {
 
-  private userSubject = new BehaviorSubject<User>(this.getUserToLocalStorage());
+  private userSubject = new BehaviorSubject<User>(this.getUserFromLocalStorage());
   public userObservable$ : Observable<User>
   constructor(private http: HttpClient, 
     private toastrService: ToastrService) { 
@@ -74,7 +74,7 @@ export class LoginServiceService {
     localStorage.setItem(LOGIN_USER, JSON.stringify(user))
   }
 
-  private getUserToLocalStorage(): User {
+  private getUserFromLocalStorage(): User {
     if(typeof localStorage !== 'undefined'){
       const userJson = localStorage.getItem(LOGIN_USER);
     if(userJson) {
@@ -82,5 +82,9 @@ export class LoginServiceService {
     }
   }
     return new User()
+}
+
+getUserToken() {
+  return this.getUserFromLocalStorage().token;
 }
 }
