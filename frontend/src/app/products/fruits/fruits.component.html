@@ -1,15 +1,26 @@
+<form #highlight>
+  <b>Highlight:</b>
+<input type="checkbox" name="name" #name="ngModel" [(ngModel)]="highlightColor.name" [checked]="highlightColor.name" (ngModelChange)="highlightColor.name? highlightColorClass.name = colorCodes[0] : highlightColorClass.name = ''">name
+<input type="checkbox" name="price" #price="ngModel" [(ngModel)]="highlightColor.price" [checked]="highlightColor.price" (ngModelChange)="highlightColor.price? highlightColorClass.price = colorCodes[1] : highlightColorClass.price = ''">price
+<input type="checkbox" name="discount" #discount="ngModel" [(ngModel)]="highlightColor.discount" [checked]="highlightColor.discount" (ngModelChange)="highlightColor.discount? highlightColorClass.discount = colorCodes[2] : highlightColorClass.discount = ''">discount
+<input type="checkbox" name="about" #about="ngModel" value="" [(ngModel)]="highlightColor.about" [checked]="highlightColor.about" (ngModelChange)="highlightColor.about? highlightColorClass.about = colorCodes[3] : highlightColorClass.about = ''">about 
+</form>
 <ng-container *ngIf="fruits && fruits.length > 0">
-  <div class="card" *ngFor="let fruit of fruits; trackBy: isUpdated">
-    <h1>{{ fruit.name }}</h1>
+  <div class="card" *ngFor="let fruit of fruits; let i=index; trackBy: isUpdated">
+    <h1 appHighlight [color]="highlightColorClass" ele="name">{{ fruit.name }}</h1>
     <div *ngIf="!isEdit || isEdit['name'] !== fruit.name">
-      <p class="price">${{ fruit.price }}/{{ fruit.quantity }}</p>
-      <p>
+      <p [appCurrencyConverter]="currencyConvertRate" [amount]="{price: fruit.price, id: i}" appHighlight [color]="highlightColorClass" ele="price" class="price">${{ fruit.price }}/{{ fruit.quantity }}
+        <!-- <i  fa-fa-info-circle id="priceConversion{{i}}"></i> -->
+      </p>
+      
+      <p appHighlight [color]="highlightColorClass" ele="discount">
         <b>Given discount {{ fruit.discount }}..</b>
       </p>
       <p>
         <b>Some text about the {{ fruit.name }}..</b>
       </p>
-      <p>{{ fruit.about }}</p>
+      
+      <p appHighlight [color]="highlightColorClass" ele="about">{{fruit.about}}</p>
       <p><button (click)="enableEdit(fruit.name)">Edit</button></p>
     </div>
     <form
@@ -50,7 +61,7 @@
         />
       </p>
       <p>
-        about:<textarea
+        about:<textarea 
           id="about"
           name="about"
           [(ngModel)]="updatedFruit.about"

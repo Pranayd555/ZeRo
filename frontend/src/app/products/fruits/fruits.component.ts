@@ -10,9 +10,26 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 export class FruitsComponent implements OnInit{
 
   fruits: Fruit[] = [];
+  colorCodes = ['orange', 'red', 'green', 'blue'];
+  currencyConvertRate = [{"usd/inr": 0.012, "inr/usd": 83.45}]
   updatedFruit: Fruit = new Fruit();
   isEdit: any;
   sharedService = inject(SharedService);
+
+  highlightColor = {
+    name: true,
+    price: true,
+    discount: true,
+    about: true
+  }
+
+  highlightColorClass = {
+    name: this.colorCodes[0],
+    price: this.colorCodes[1],
+    discount: this.colorCodes[2],
+    about: this.colorCodes[3]
+  }
+
 
   ngOnInit() {
     this.sharedService.getFruits().subscribe(

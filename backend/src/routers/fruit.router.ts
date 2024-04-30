@@ -48,7 +48,6 @@ router.put("/update",verifyToken, asyncHandler(
 ));
 
 function verifyToken(req:any, res:any, next: any) {
-    console.log(req.headers.authorisation);
     if(!req.headers.authorisation) {
         return res.status(HTTP_UNAUTHORISED_REQUEST).send('Unauthorised request: No authorisation')
     }

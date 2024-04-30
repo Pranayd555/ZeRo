@@ -10,12 +10,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TokenInterceptorService } from './shared/services/token-interceptor.service';
+import { CurrencyConverterDirective } from './shared/directives/currency-converter.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
