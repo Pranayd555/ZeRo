@@ -7,6 +7,7 @@ import { UserLoginComponent } from './user-login/user-login.component';
 import { UserSignupComponent } from './user-signup/user-signup.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/modules/shared/shared.module';
+import { UtilityModule } from '../shared/modules/utilities/utilities.module';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { SharedModule } from '../shared/modules/shared/shared.module';
     RegisterRoutingModule,
     FormsModule,
     SharedModule,
+    UtilityModule
   ]
 })
 export class RegisterModule { }

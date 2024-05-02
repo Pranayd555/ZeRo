@@ -10,18 +10,24 @@ import { User } from 'src/app/shared/models/user';
 })
 export class UserSignupComponent {
   registerUser: User = new User();
-
+  loadSpinner = false;
   constructor( private loginService: LoginServiceService, private router:Router) {}
 
   ngOnInit() {
     this.registerUser.isAdmin = "no";
   }
   onSubmit() {
+    this.loadSpinner = true;
     this.loginService.register(this.registerUser).subscribe(
-      data => {
+      {next : data => {
+        this.loadSpinner = false;
         this.router.navigate(['welcome']);
         console.log('user registered', data)
       },
+    error : error => {
+      this.loadSpinner = false;
+      console.log('error while register', error);
+    }},
     )
   }
 }

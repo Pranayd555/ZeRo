@@ -10,3 +10,7 @@
   max-width: 30%;
   min-width: 30%;
 }
+
+.spinner {
+  margin: auto;
+}

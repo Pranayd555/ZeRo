@@ -5,13 +5,13 @@ import { FruitsRoutingModule } from './fruits-routing.module';
 import { FruitsComponent } from './fruits.component';
 import { FormsModule } from '@angular/forms';
 import { UtilityModule } from 'src/app/shared/modules/utilities/utilities.module';
-// import { SharedModule } from 'src/app/shared/modules/shared/shared.module';
 import { MatTooltipModule} from '@angular/material/tooltip';
-
+import { AddFruitComponent } from './add-fruit/add-fruit.component';
 
 @NgModule({
   declarations: [
-    FruitsComponent
+    FruitsComponent,
+    AddFruitComponent
   ],
   imports: [
     CommonModule,

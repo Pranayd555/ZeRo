@@ -21,6 +21,7 @@ constructor(public matTooltip: MatTooltip) {
     convertedAmount = JSON.stringify(Math.round(this.appCurrencyConverter[0]["inr/usd"] * Number(this.amount.price)))
   }
   this.matTooltip.message = 'Rs. ' + convertedAmount;
+  this.matTooltip.position = 'right';
   this.matTooltip.show();
 }
 

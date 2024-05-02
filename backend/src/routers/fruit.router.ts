@@ -3,7 +3,7 @@ import { sample_fruits } from '../data';
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import { HTTP_BAD_REQUEST, HTTP_UNAUTHORISED_REQUEST } from '../constants/https_status';
-import { FruitModel } from '../models/fruits.model';
+import { Fruit, FruitModel } from '../models/fruits.model';
 
 
 const router = Router();
@@ -34,10 +34,10 @@ router.get("/",verifyToken, asyncHandler (
 router.put("/update",verifyToken, asyncHandler(
     async (req, res) => {
         const {name} = req.body;
-        let fruit: any;
-        let updatedFruit: any;
+        let fruit: Fruit | null;
+        let updatedFruit: null | any;
         fruit = await FruitModel.findOne({name});
-        if(name) {
+        if(fruit) {
             updatedFruit = await FruitModel.replaceOne({name: name}, req.body);
             fruit = await FruitModel.findOne({name});
             res.send(fruit);
@@ -46,6 +46,40 @@ router.put("/update",verifyToken, asyncHandler(
         }
     }
 ));
+
+router.post("/add", verifyToken, asyncHandler(
+    async(req,res) => {
+        const {name} = req.body;
+        let fruit: Fruit | null;
+        let addedFruit: any | null;
+        fruit = await FruitModel.findOne({name})
+        if(fruit) {
+            res.status(500).send('the fruit already exists in database')
+        } else {
+            addedFruit = await FruitModel.insertMany([req.body])
+            res.send(addedFruit)
+        }
+    }
+))
+
+router.post("/delete", verifyToken, asyncHandler(
+    async(req,res) => {
+        const {name} = req.body;
+        let fruit: Fruit | null;
+        let addedFruit: any | null;
+        fruit = await FruitModel.findOne({name})
+        if(fruit) {            
+            addedFruit = await FruitModel.deleteOne({name})
+            if (addedFruit.deletedCount === 1) {
+                res.send({"message":"Successfully deleted one document."});
+              } else {
+                res.status(500).send("No documents matched the query. Deleted 0 documents.");
+              }
+        } else {
+            res.status(500).send('error deleting fruit')
+        }
+    }
+))
 
 function verifyToken(req:any, res:any, next: any) {
     if(!req.headers.authorisation) {

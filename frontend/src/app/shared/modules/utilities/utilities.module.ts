@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CurrencyConverterDirective } from '../../directives/currency-converter.directive';
 import { HighlightDirective } from '../../directives/highlight.directive';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -11,11 +12,13 @@ import { HighlightDirective } from '../../directives/highlight.directive';
     HighlightDirective
     ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     CurrencyConverterDirective,
-    HighlightDirective
+    HighlightDirective,
+    MatProgressSpinnerModule
     ]
 })
 export class UtilityModule { }

@@ -15,6 +15,7 @@ export class FruitsComponent implements OnInit{
   updatedFruit: Fruit = new Fruit();
   isEdit: any;
   sharedService = inject(SharedService);
+  addNew = false;
 
   highlightColor = {
     name: true,
@@ -32,48 +33,50 @@ export class FruitsComponent implements OnInit{
 
 
   ngOnInit() {
-    this.sharedService.getFruits().subscribe(
-     {
-      next: (data: Fruit[]) => {
-          this.fruits = data;
-          console.log('fruits', this.fruits)
-      },
-      error: (error) => {
-        console.log('error occurred while fetching the data', error)
-      }
-    }
-    );
+    this.getAllFruits();
   }
 
-  onSubmit(fruit: Fruit) {
-    
-    this.sharedService.updateFruit(fruit).subscribe({
-      next: (data: Fruit) => {
-        console.log('upload successfully', data);
-        this.fruits.map( fruit => {
-          if(fruit.name == data.name) {
-            fruit = data;
-            this.isEdit = Object.assign({...this.isEdit}, {})
-          }
-        })
-      },
-      error: (error: any) => {
-        console.log('error in upload', error);
-      }
-    })
+  getAllFruits() {
+    this.sharedService.getFruits().subscribe(
+      {
+       next: (data: Fruit[]) => {
+           this.fruits = data;
+           console.log('fruits', this.fruits)
+       },
+       error: (error) => {
+         console.log('error occurred while fetching the data', error)
+       }
+     }
+     );
   }
 
 
   enableEdit(name: string) {
-    if(this.isEdit?.name && name !== this.isEdit?.name ) {
-      let oldFruit = this.fruits.find( fruit => fruit.name == this.isEdit.name)!;
-      JSON.stringify(oldFruit) !== JSON.stringify(this.updatedFruit) ? this.onSubmit(oldFruit) : '';
-    }
-    this.updatedFruit = this.fruits.find( fruit => fruit.name == this.isEdit.name)!;
+    this.addNew ? this.addNew = false : ''
     this.isEdit = Object.assign({...this.isEdit}, {'name': name})
+    this.updatedFruit = {...this.fruits.find( fruit => fruit.name == name)!};
   }
 
   isUpdated(index: any, value: Fruit) {
     return value;
   }
+
+  resetEdit() {
+    this.isEdit = {}
+  }
+
+  addNewFruit() {
+    this.addNew = true;
+    this.isEdit = {};
+    this.updatedFruit = new Fruit()
+  }
+
+  deleteFruit(name: string) {
+    this.sharedService.deleteFruit(name).subscribe({
+      next: () => {
+        this.getAllFruits();
+      }
+    });
+  } 
+  
 }

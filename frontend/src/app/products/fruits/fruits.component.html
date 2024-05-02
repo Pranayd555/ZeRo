@@ -1,74 +1,111 @@
-<form #highlight>
+<mat-progress-spinner
+  class="spinner"
+  mode="indeterminate"
+  *ngIf="!fruits || fruits.length == 0"
+></mat-progress-spinner>
+<form *ngIf="fruits && fruits.length > 0" #highlight>
   <b>Highlight:</b>
-<input type="checkbox" name="name" #name="ngModel" [(ngModel)]="highlightColor.name" [checked]="highlightColor.name" (ngModelChange)="highlightColor.name? highlightColorClass.name = colorCodes[0] : highlightColorClass.name = ''">name
-<input type="checkbox" name="price" #price="ngModel" [(ngModel)]="highlightColor.price" [checked]="highlightColor.price" (ngModelChange)="highlightColor.price? highlightColorClass.price = colorCodes[1] : highlightColorClass.price = ''">price
-<input type="checkbox" name="discount" #discount="ngModel" [(ngModel)]="highlightColor.discount" [checked]="highlightColor.discount" (ngModelChange)="highlightColor.discount? highlightColorClass.discount = colorCodes[2] : highlightColorClass.discount = ''">discount
-<input type="checkbox" name="about" #about="ngModel" value="" [(ngModel)]="highlightColor.about" [checked]="highlightColor.about" (ngModelChange)="highlightColor.about? highlightColorClass.about = colorCodes[3] : highlightColorClass.about = ''">about 
+  <input
+    type="checkbox"
+    name="name"
+    #name="ngModel"
+    [(ngModel)]="highlightColor.name"
+    [checked]="highlightColor.name"
+    (ngModelChange)="
+      highlightColor.name
+        ? (highlightColorClass.name = colorCodes[0])
+        : (highlightColorClass.name = '')
+    "
+  />name
+  <input
+    type="checkbox"
+    name="price"
+    #price="ngModel"
+    [(ngModel)]="highlightColor.price"
+    [checked]="highlightColor.price"
+    (ngModelChange)="
+      highlightColor.price
+        ? (highlightColorClass.price = colorCodes[1])
+        : (highlightColorClass.price = '')
+    "
+  />price
+  <input
+    type="checkbox"
+    name="discount"
+    #discount="ngModel"
+    [(ngModel)]="highlightColor.discount"
+    [checked]="highlightColor.discount"
+    (ngModelChange)="
+      highlightColor.discount
+        ? (highlightColorClass.discount = colorCodes[2])
+        : (highlightColorClass.discount = '')
+    "
+  />discount
+  <input
+    type="checkbox"
+    name="about"
+    #about="ngModel"
+    value=""
+    [(ngModel)]="highlightColor.about"
+    [checked]="highlightColor.about"
+    (ngModelChange)="
+      highlightColor.about
+        ? (highlightColorClass.about = colorCodes[3])
+        : (highlightColorClass.about = '')
+    "
+  />about
 </form>
 <ng-container *ngIf="fruits && fruits.length > 0">
-  <div class="card" *ngFor="let fruit of fruits; let i=index; trackBy: isUpdated">
-    <h1 appHighlight [color]="highlightColorClass" ele="name">{{ fruit.name }}</h1>
+  <div
+    class="card"
+    *ngFor="let fruit of fruits; let i = index; trackBy: isUpdated"
+  >
+    <h1 appHighlight [color]="highlightColorClass" ele="name">
+      {{ fruit.name }}
+    </h1>
     <div *ngIf="!isEdit || isEdit['name'] !== fruit.name">
-      <p [appCurrencyConverter]="currencyConvertRate" [amount]="{price: fruit.price, id: i}" appHighlight [color]="highlightColorClass" ele="price" class="price">${{ fruit.price }}/{{ fruit.quantity }}
+      <span
+        [appCurrencyConverter]="currencyConvertRate"
+        [amount]="{ price: fruit.price, id: i }"
+        appHighlight
+        [color]="highlightColorClass"
+        ele="price"
+        class="price"
+        >${{ fruit.price }}/{{ fruit.quantity }}
         <!-- <i  fa-fa-info-circle id="priceConversion{{i}}"></i> -->
-      </p>
-      
+      </span>
+
       <p appHighlight [color]="highlightColorClass" ele="discount">
         <b>Given discount {{ fruit.discount }}..</b>
       </p>
       <p>
         <b>Some text about the {{ fruit.name }}..</b>
       </p>
-      
-      <p appHighlight [color]="highlightColorClass" ele="about">{{fruit.about}}</p>
-      <p><button (click)="enableEdit(fruit.name)">Edit</button></p>
+
+      <p appHighlight [color]="highlightColorClass" ele="about">
+        {{ fruit.about }}
+      </p>
+      <p><button (click)="enableEdit(fruit.name)">Edit</button> 
+        <button (click)="deleteFruit(fruit.name)">Delete</button></p>
     </div>
-    <form
-      *ngIf="isEdit && isEdit['name'] == updatedFruit.name"
-      class="form"
-      #fruitsForm="ngForm"
-      (ngSubmit)="fruitsForm.valid ? onSubmit(updatedFruit) : ''"
-      novalidate
-      autocomplete="off"
-    >
-      <p>
-        price:<input
-          type="text"
-          [ngClass]="price.touched && price.invalid ? 'error' : ''"
-          name="price"
-          [(ngModel)]="updatedFruit.price"
-          #price="ngModel"
-          id="price"
-        />
-      </p>
-      <p>
-        quatity:<input
-          type="text"
-          [ngClass]="quantity.touched && quantity.invalid ? 'error' : ''"
-          name="quantity"
-          [(ngModel)]="updatedFruit.quantity"
-          #quantity="ngModel"
-          id="quantity"
-        />
-      </p>
-      <p>
-        Discount:<input
-          type="text"
-          name="discount"
-          [(ngModel)]="updatedFruit.discount"
-          #discount="ngModel"
-          id="discount"
-        />
-      </p>
-      <p>
-        about:<textarea 
-          id="about"
-          name="about"
-          [(ngModel)]="updatedFruit.about"
-          #about="ngModel"
-        ></textarea>
-      </p>
-      <p><button type="submit">Update</button></p>
-    </form>
+    <app-add-fruit *ngIf="isEdit && isEdit['name'] == fruit.name"
+      [update]="addNew"
+      [(updatedFruit)]="updatedFruit"
+      [(isEdit)]="isEdit"
+      [(fruits)]="fruits"
+      [fruit]="fruit"
+    ></app-add-fruit>
+  </div>
+  
+  <div class="card" *ngIf="addNew">
+    <app-add-fruit
+      [(update)]="addNew"
+      [(updatedFruit)]="updatedFruit"
+      [(isEdit)]="isEdit"
+      [(fruits)]="fruits"
+    ></app-add-fruit>
+  </div>
+  <div class="more-btn">
+    <button type="button" (click)="addNewFruit()" class="add btn btn-light">Add More</button>
   </div>
 </ng-container>

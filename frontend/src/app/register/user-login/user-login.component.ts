@@ -13,6 +13,7 @@ export class UserLoginComponent {
   demoData: User[] = []
 
   loginUser: LoginUser = new LoginUser();
+  loadSpinner = false;
 
   constructor( private loginService : LoginServiceService, private router: Router) {}
   ngOnInit(): void {
@@ -38,11 +39,18 @@ export class UserLoginComponent {
   }
 
   onSubmit() {
+    this.loadSpinner = true;
     this.loginService.loginUser(this.loginUser).subscribe(
-          data => {
+       {next:   data => {
             console.log('logged in user', data)
+            this.loadSpinner = false;
             this.router.navigate(['welcome']);
-          }
+            
+          },
+        error: error => {
+          this.loadSpinner = false;
+          console.log('error while logging in', error)
+        }}
         )
   }
 }

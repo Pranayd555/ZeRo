@@ -1,0 +1,59 @@
+<div class="card">
+<form
+      
+      class="form"
+      #fruitsForm="ngForm"
+      (ngSubmit)="fruitsForm.valid ? updateClick$.next($event) : ''"
+      novalidate
+      autocomplete="off"
+    >
+    <p *ngIf="update">
+        Name:<input
+          type="text"
+          [ngClass]="fname.touched && fname.invalid ? 'error' : ''"
+          name="fname"
+          [(ngModel)]="updatedFruit.name"
+          #fname="ngModel"
+          id="fname"
+        />
+      </p>
+      <p>
+        price:<input
+          type="text"
+          [ngClass]="price.touched && price.invalid ? 'error' : ''"
+          name="price"
+          [(ngModel)]="updatedFruit.price"
+          #price="ngModel"
+          id="price"
+        />
+      </p>
+      <p>
+        quatity:<input
+          type="text"
+          [ngClass]="quantity.touched && quantity.invalid ? 'error' : ''"
+          name="quantity"
+          [(ngModel)]="updatedFruit.quantity"
+          #quantity="ngModel"
+          id="quantity"
+        />
+      </p>
+      <p>
+        Discount:<input
+          type="text"
+          name="discount"
+          [(ngModel)]="updatedFruit.discount"
+          #discount="ngModel"
+          id="discount"
+        />
+      </p>
+      <p>
+        about:<textarea 
+          id="about"
+          name="about"
+          [(ngModel)]="updatedFruit.about"
+          #about="ngModel"
+        ></textarea>
+      </p>
+      <p><button type="submit" [innerHTML]="update ? 'ADD New' : 'Update'"></button></p>
+    </form>
+</div>
