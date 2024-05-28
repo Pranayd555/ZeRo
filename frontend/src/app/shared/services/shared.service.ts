@@ -17,31 +17,15 @@ export class SharedService {
     return this.http.get<Fruit[]>(FRUITS_URL);
   }
 
-  updateFruit(fruit:Fruit): Observable<Fruit> {
-    return this.http.put<Fruit>(FRUITS_UPDATE_URL, fruit);
+  updateFruit(fruit:Fruit): Observable<Fruit[]> {
+    return this.http.put<Fruit[]>(FRUITS_UPDATE_URL, fruit);
   }
 
   addFruit(fruit: Fruit): Observable<Fruit[]> {
     return this.http.post<Fruit[]>(FRUITS_ADD_URL, fruit);
   }
 
-  deleteFruit(name: string): Observable<String> {
-    return this.http.post<String>(FRUITS_DELETE_URL, {"name" : name})
-    // .pipe(
-    //   tap({
-    //     next : ()=> {
-    //       this.toastrService.success(
-    //         `${name} has been successfully deleted`,
-    //         'Delete Successful'
-    //       )
-    //     },
-    //     error: (error)=> {
-    //       this.toastrService.error(
-    //         `${name} is not deleted`,
-    //         'Delete Failed'
-    //       )
-    //     }
-    //   })
-    // );
+  deleteFruit(name: string): Observable<Fruit[]> {
+    return this.http.post<Fruit[]>(FRUITS_DELETE_URL, {"name" : name})
   }
 }

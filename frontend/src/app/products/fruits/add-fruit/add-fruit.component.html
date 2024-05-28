@@ -7,7 +7,7 @@
       novalidate
       autocomplete="off"
     >
-    <p *ngIf="update">
+    <p *ngIf="addNew">
         Name:<input
           type="text"
           [ngClass]="fname.touched && fname.invalid ? 'error' : ''"
@@ -54,6 +54,8 @@
           #about="ngModel"
         ></textarea>
       </p>
-      <p><button type="submit" [innerHTML]="update ? 'ADD New' : 'Update'"></button></p>
+      <p><button type="submit" [innerHTML]="addNew ? 'ADD New' : 'Update'"></button>
+        <button type="button" (click)="cancelUpdate()" [innerHTML]="'Cancel'"></button></p>
     </form>
+    <mat-progress-bar id="progressbar0" appCustomLoader [isLoading]="isLoading" #progressBar mode="indeterminate"></mat-progress-bar>
 </div>

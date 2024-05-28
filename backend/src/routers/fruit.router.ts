@@ -25,7 +25,8 @@ router.get("/",verifyToken, asyncHandler (
         const fruitsCount = await FruitModel.countDocuments();
         if(fruitsCount > 0) {
             const fruits = await FruitModel.find();
-            res.status(200).send(fruits);
+            let updatedF = mapToFruitModel(fruits);
+            res.status(200).send(updatedF);
             return;
         }
         res.status(500).send("No fruit is availale in the collection")
@@ -39,8 +40,9 @@ router.put("/update",verifyToken, asyncHandler(
         fruit = await FruitModel.findOne({name});
         if(fruit) {
             updatedFruit = await FruitModel.replaceOne({name: name}, req.body);
-            fruit = await FruitModel.findOne({name});
-            res.send(fruit);
+            const fruits = await FruitModel.find();
+            let updatedF = mapToFruitModel(fruits);
+            res.send(updatedF);
                 } else {
             res.status(500).send('error has occurred while uploading the file');
         }
@@ -57,7 +59,9 @@ router.post("/add", verifyToken, asyncHandler(
             res.status(500).send('the fruit already exists in database')
         } else {
             addedFruit = await FruitModel.insertMany([req.body])
-            res.send(addedFruit)
+            const fruits = await FruitModel.find();
+            let updatedF = mapToFruitModel(fruits);
+            res.send(updatedF);
         }
     }
 ))
@@ -71,7 +75,9 @@ router.post("/delete", verifyToken, asyncHandler(
         if(fruit) {            
             addedFruit = await FruitModel.deleteOne({name})
             if (addedFruit.deletedCount === 1) {
-                res.send({"message":"Successfully deleted one document."});
+                const fruits = await FruitModel.find();
+                let updatedF = mapToFruitModel(fruits);
+                res.send(updatedF);
               } else {
                 res.status(500).send("No documents matched the query. Deleted 0 documents.");
               }
@@ -98,6 +104,21 @@ function verifyToken(req:any, res:any, next: any) {
     }
     req.userId = payload.sub
     next();
+}
+
+function mapToFruitModel(fruits: Fruit[]) {
+    let updatedF = fruits.map( fruit => {
+        return {
+            name: fruit.name,
+            id: fruit.id,
+            discount: fruit.discount,
+            about: fruit.about ? fruit.about : "",
+            quantity: fruit.quantity ? fruit.quantity : "",
+            price: fruit.price,
+            availability: fruit.availability ? fruit.availability : true
+        }
+    })
+    return updatedF;
 }
 
 export default router;

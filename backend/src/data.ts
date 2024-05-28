@@ -26,27 +26,31 @@ export const sample_fruits: any[] = [
         quantity: '5',
         availability: true,
         discount: "5%",
+        about: ""
     },
     {
         name: 'Banana',
         price: '20',
         quantity: '10',
         availability: true,
-        discount: "2%"
+        discount: "2%",
+        about: ""
     },
     {
         name: 'Apple',
         price: '60',
         quantity: '3',
         availability: true,
-        discount: ""
+        discount: "",
+        about: ""
     },
     {
         name: 'Watermelon',
         price: '30',
         quantity: '1',
         availability: true,
-        discount: "5%"
+        discount: "5%",
+        about: ""
     },
     {
         name: 'Lichi',
