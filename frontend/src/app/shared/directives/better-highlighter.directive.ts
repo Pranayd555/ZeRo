@@ -12,7 +12,7 @@ export class BetterHighlighterDirective {
   @HostBinding('style.backgroundColor') backgroundColor: string = '#F5E9E7';
 
   @HostListener('mouseenter', ['$event']) onMouseEnter () {
-    this.element.nativeElement.style.backgroundColor = '#39FF90';
+    this.element.nativeElement.style.backgroundColor = '#FFFECE';
   }
 
   @HostListener('mouseleave', ['$event']) onMouseLeave () {

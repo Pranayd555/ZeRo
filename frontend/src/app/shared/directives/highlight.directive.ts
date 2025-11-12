@@ -1,9 +1,10 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Renderer2, SimpleChange } from '@angular/core';
 
 @Directive({
   selector: '[appHighlight]'
 })
 export class HighlightDirective {
+  @Input() appHighlight : boolean = false;
   @Input() color : any = {
     name:true,
     price: true,
@@ -11,29 +12,43 @@ export class HighlightDirective {
     discount: true
   }
   @Input() ele: string = '';
-  constructor(private el: ElementRef) {
+  @Input() zoomScale: number = 1.2; // how much to zoom
+  @Input() zoomTransition: string = 'transform 0.3s ease-in-out';
+  constructor(private el: ElementRef, private renderer: Renderer2) {
+    this.renderer.setStyle(this.el.nativeElement, 'display', 'block');
+    this.renderer.setStyle(this.el.nativeElement, 'transition', this.zoomTransition);
    }
 
    @HostListener("mouseenter") onMouseEnter() {
-    this.highlight(this.color);
+      this.zoomIn();
    }
 
    @HostListener("mouseleave") onMouseLeave() {
+      this.zoomOut();
+   }
+
+   ngOnChanges(changes: SimpleChange) {
+    if(this.appHighlight) {
+    this.highlight(this.color);
+    } else {
     this.highlight("")
+    }
    }
 
    private highlight(color: any) {
-    if(this.ele == 'name') {
-      this.el.nativeElement.style.color = color.name ? color.name : '' ;
-    } else if (this.ele == 'about'){
-      this.el.nativeElement.style.color = color.about ? color.about : '';
-    } else if (this.ele == 'discount') {
-      this.el.nativeElement.style.color = color.discount ? color.discount : '';
-    } else if (this.ele == 'price') {
-      this.el.nativeElement.style.color = color.price ? color.price : '';
+    if(color) {
+      this.el.nativeElement.style.color = color[this.ele]
     } else {
       this.el.nativeElement.style.color = ''
     }
+   }
+
+   private zoomIn() {
+     this.renderer.setStyle(this.el.nativeElement, 'transform', `scale(${this.zoomScale})`);
+   }
+
+   private zoomOut() {
+     this.renderer.setStyle(this.el.nativeElement, 'transform', 'scale(1)');
    }
 
 }

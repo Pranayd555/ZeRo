@@ -1,61 +1,85 @@
-<div class="card">
-<form
-      
-      class="form"
-      #fruitsForm="ngForm"
-      (ngSubmit)="fruitsForm.valid ? updateClick$.next($event) : ''"
-      novalidate
-      autocomplete="off"
-    >
-    <p *ngIf="addNew">
-        Name:<input
-          type="text"
-          [ngClass]="fname.touched && fname.invalid ? 'error' : ''"
-          name="fname"
-          [(ngModel)]="updatedFruit.name"
-          #fname="ngModel"
-          id="fname"
-        />
-      </p>
-      <p>
-        price:<input
-          type="text"
-          [ngClass]="price.touched && price.invalid ? 'error' : ''"
-          name="price"
-          [(ngModel)]="updatedFruit.price"
-          #price="ngModel"
-          id="price"
-        />
-      </p>
-      <p>
-        quatity:<input
-          type="text"
-          [ngClass]="quantity.touched && quantity.invalid ? 'error' : ''"
-          name="quantity"
-          [(ngModel)]="updatedFruit.quantity"
-          #quantity="ngModel"
-          id="quantity"
-        />
-      </p>
-      <p>
-        Discount:<input
-          type="text"
-          name="discount"
-          [(ngModel)]="updatedFruit.discount"
-          #discount="ngModel"
-          id="discount"
-        />
-      </p>
-      <p>
-        about:<textarea 
-          id="about"
-          name="about"
-          [(ngModel)]="updatedFruit.about"
-          #about="ngModel"
-        ></textarea>
-      </p>
-      <p><button type="submit" [innerHTML]="addNew ? 'ADD New' : 'Update'"></button>
-        <button type="button" (click)="cancelUpdate()" [innerHTML]="'Cancel'"></button></p>
-    </form>
-    <mat-progress-bar id="progressbar0" appCustomLoader [isLoading]="isLoading" #progressBar mode="indeterminate"></mat-progress-bar>
+<div class="card p-4 shadow-sm">
+  <form
+    class="form"
+    #fruitsForm="ngForm"
+    (ngSubmit)="fruitsForm.valid ? updateClick$.next($event) : ''"
+    novalidate
+    autocomplete="off"
+  >
+    <div class="mb-3" *ngIf="addNew">
+      <label for="fname" class="form-label">Name:</label>
+      <input
+        type="text"
+        class="form-control"
+        [ngClass]="fname.touched && fname.invalid ? 'is-invalid' : ''"
+        name="fname"
+        [(ngModel)]="updatedFruit.name"
+        #fname="ngModel"
+        id="fname"
+        required
+      />
+      <div *ngIf="fname.touched && fname.invalid" class="invalid-feedback">
+        Name is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price:</label>
+      <input
+        type="text"
+        class="form-control"
+        [ngClass]="price.touched && price.invalid ? 'is-invalid' : ''"
+        name="price"
+        [(ngModel)]="updatedFruit.price"
+        #price="ngModel"
+        id="price"
+        required
+      />
+      <div *ngIf="price.touched && price.invalid" class="invalid-feedback">
+        Price is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="quantity" class="form-label">Quantity:</label>
+      <input
+        type="text"
+        class="form-control"
+        [ngClass]="quantity.touched && quantity.invalid ? 'is-invalid' : ''"
+        name="quantity"
+        [(ngModel)]="updatedFruit.quantity"
+        #quantity="ngModel"
+        id="quantity"
+        required
+      />
+      <div *ngIf="quantity.touched && quantity.invalid" class="invalid-feedback">
+        Quantity is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="discount" class="form-label">Discount:</label>
+      <input
+        type="text"
+        class="form-control"
+        name="discount"
+        [(ngModel)]="updatedFruit.discount"
+        #discount="ngModel"
+        id="discount"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="about" class="form-label">About:</label>
+      <textarea
+        class="form-control"
+        id="about"
+        rows="4"
+        name="about"
+        [(ngModel)]="updatedFruit.about"
+        #about="ngModel"
+      ></textarea>
+    </div>
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary me-2" [innerHTML]="addNew ? 'Add New' : 'Update'"></button>
+      <button type="button" class="btn btn-secondary" (click)="cancelUpdate()" [innerHTML]="'Cancel'"></button>
+    </div>
+  </form>
+  <mat-progress-bar id="progressbar0" appCustomLoader [isLoading]="isLoading" #progressBar mode="indeterminate"></mat-progress-bar>
 </div>

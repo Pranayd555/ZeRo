@@ -19,3 +19,7 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 html, body { height: 100%; }
+
+.wrapper {
+    overflow-y: auto;
+}

@@ -3,6 +3,7 @@
   mode="indeterminate"
   *ngIf="!fruits || fruits.length == 0"
 ></mat-progress-spinner>
+<div class="p-2 m-2">
 <form *ngIf="fruits && fruits.length > 0" #highlight>
   <b>Highlight:</b>
   <input
@@ -11,11 +12,6 @@
     #name="ngModel"
     [(ngModel)]="highlightColor.name"
     [checked]="highlightColor.name"
-    (ngModelChange)="
-      highlightColor.name
-        ? (highlightColorClass.name = colorCodes[0])
-        : (highlightColorClass.name = '')
-    "
   />name
   <input
     type="checkbox"
@@ -23,11 +19,6 @@
     #price="ngModel"
     [(ngModel)]="highlightColor.price"
     [checked]="highlightColor.price"
-    (ngModelChange)="
-      highlightColor.price
-        ? (highlightColorClass.price = colorCodes[1])
-        : (highlightColorClass.price = '')
-    "
   />price
   <input
     type="checkbox"
@@ -35,11 +26,6 @@
     #discount="ngModel"
     [(ngModel)]="highlightColor.discount"
     [checked]="highlightColor.discount"
-    (ngModelChange)="
-      highlightColor.discount
-        ? (highlightColorClass.discount = colorCodes[2])
-        : (highlightColorClass.discount = '')
-    "
   />discount
   <input
     type="checkbox"
@@ -48,46 +34,44 @@
     value=""
     [(ngModel)]="highlightColor.about"
     [checked]="highlightColor.about"
-    (ngModelChange)="
-      highlightColor.about
-        ? (highlightColorClass.about = colorCodes[3])
-        : (highlightColorClass.about = '')
-    "
   />about
 </form>
+</div>
 <ng-container *ngIf="fruits && fruits.length > 0">
+  <div class="container">
   <ng-container
   *ngFor="let fruit of fruits; let i = index; trackBy: isUpdated">
   <div appBetterHighlighter
     class="card" *ngIf="fruit.name"
   >
-    <h1 appHighlight [color]="highlightColorClass" ele="name">
+    <h1 [appHighlight]="highlightColor.name" [zoomScale]="1.2" [color]="highlightColorClass" ele="name">
       {{ fruit.name }}
     </h1>
     <div *ngIf="(!isEdit || isEdit['name'] !== fruit.name)">
-      <span
+      <span 
         [appCurrencyConverter]="currencyConvertRate"
         [amount]="{ price: fruit.price, id: i }"
-        appHighlight
+        [appHighlight]="highlightColor.price"
         [color]="highlightColorClass"
+        [zoomScale]="1.2"
         ele="price"
         class="price"
         >${{ fruit.price }}/{{ fruit.quantity }}
         <!-- <i  fa-fa-info-circle id="priceConversion{{i}}"></i> -->
       </span>
 
-      <p appHighlight [color]="highlightColorClass" ele="discount">
+      <p [appHighlight]="highlightColor.discount" [zoomScale]="1.2" [color]="highlightColorClass" ele="discount">
         <b>Given discount {{ fruit.discount }}..</b>
       </p>
       <p>
         <b>Some text about the {{ fruit.name }}..</b>
       </p>
 
-      <p appHighlight [color]="highlightColorClass" ele="about">
+      <p [appHighlight]="highlightColor.about" [zoomScale]="1.1" [color]="highlightColorClass" ele="about" class="mb-4 mt-4 pt-6 pb-6">
         {{ fruit.about }}
       </p>
-      <p><button (click)="enableEdit(fruit.name)">Edit</button> 
-        <button (click)="deleteFruit(fruit.name, i)">Delete
+      <p><button type="button" class="btn btn-primary" (click)="enableEdit(fruit.name)">Edit</button> 
+        <button type="button" class="btn btn-danger" (click)="deleteFruit(fruit.name, i)">Delete
       </button></p>
       <mat-progress-bar id="progressbar{{i}}" appCustomLoader [isLoading]="isDelete" #progressBar mode="indeterminate"></mat-progress-bar>
     </div>
@@ -109,7 +93,9 @@
       [(fruits)]="fruits"
     ></app-add-fruit>
   </div>
-  <div #addFruit class="more-btn">
+  
+  </div>
+  <div #addFruit class="more-btn mb-4 pb-6 mt-4">
     <button type="button" (click)="addNewFruit()" class="add btn btn-light">Add More</button>
   </div>
 </ng-container>

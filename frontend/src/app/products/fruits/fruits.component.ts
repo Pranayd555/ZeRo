@@ -21,7 +21,7 @@ export class FruitsComponent implements OnInit, AfterViewInit{
   defaultDiameter = 20;
 
   fruits: Fruit[] = [];
-  colorCodes = ['orange', 'red', 'green', 'blue'];
+  colorCodes = ['#1D1CE5', '#C47AFF', '#FF0B55', '#06D001'];
   currencyConvertRate = [{"usd/inr": 0.012, "inr/usd": 83.45}]
   updatedFruit: Fruit = new Fruit();
   isEdit: any;
